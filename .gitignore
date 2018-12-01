@@ -1,0 +1,14 @@
+*.out
+*.o
+vgcore.*
+*.json
+*.res
+*.in
+*.pdf
+*.log
+*.ref
+*.tar.gz
+*.pgf
+.ipynb_checkpoints
+*.tgz
+
