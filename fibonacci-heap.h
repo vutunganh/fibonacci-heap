@@ -4,6 +4,13 @@
 #include "linked-list-node.h"
 #include "fh-node.h"
 
+#define fhExtracts(fh) (fh->extracts)
+#define fhExtractSteps(fh) (fh->extractSteps)
+#define fhExtractMax(fh) (fh->extractMax)
+#define fhDecreases(fh) (fh->decreases)
+#define fhDecreaseSteps(fh) (fh->decreaseSteps)
+#define fhDecreaseMax(fh) (fh->decreaseMax)
+
 struct FibonacciHeap
 {
   struct LinkedList trees;
@@ -11,6 +18,12 @@ struct FibonacciHeap
   int size;
   int maxKey;
   struct FhNode** keyMap;
+  int extracts;
+  int extractSteps;
+  int extractMax;
+  int decreases;
+  int decreaseSteps;
+  int decreaseMax;
 };
 
 struct FibonacciHeap*

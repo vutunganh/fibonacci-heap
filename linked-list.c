@@ -72,8 +72,6 @@ bool
 linkedListIsEmpty(struct LinkedList* linkedList)
 {
   #ifdef DEBUG
-  assert(NULL == llHead(linkedList) && NULL == llTail(linkedList));
-  assert(NULL == llTail(linkedList) && NULL == llHead(linkedList));
   if (NULL == llHead(linkedList) && NULL == llTail(linkedList)) {
     assert (0 == llSize(linkedList));
   }
