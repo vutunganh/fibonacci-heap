@@ -16,17 +16,14 @@ struct LinkedList
   int size;
 };
 
-/* Initializes a linked list.
- */
 struct LinkedList
 linkedListInit(void);
 
-/* Appends a Fibonacci heap node to a linked list.
- */
 void
-linkedListPushBack(struct LinkedList* linkedList, struct FHNode* fhNode);
+linkedListPushBack(struct LinkedList* linkedList, struct FhNode* fhNode);
 
-/* Removes a concrete node from a linked list.
+/* !!WARNING: doesn't check if `node` belongs to `linkedList`!!
+ * !!WARNING: doesn't free `node`!!
  */
 void
 linkedListRemoveNode(struct LinkedList* linkedList,
@@ -44,8 +41,9 @@ joinLinkedLists(struct LinkedList* result, struct LinkedList* linkedList);
 
 /* Returns the head of `linkedList` and removes it from `linkedList`.
  */
-void
-linkedListPopFront(struct LinkedList* linkedList);
+struct LinkedListNode*
+linkedListPopFront(struct LinkedList* linkedList)
+__attribute__ ((warn_unused_result));
 
 /* Moves `node` from `from` to `to`.
  */

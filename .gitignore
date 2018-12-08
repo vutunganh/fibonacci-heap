@@ -11,4 +11,5 @@ vgcore.*
 *.pgf
 .ipynb_checkpoints
 *.tgz
+tags
 
