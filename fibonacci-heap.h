@@ -9,6 +9,7 @@ struct FibonacciHeap
   struct LinkedList trees;
   struct FhNode* minNode;
   int size;
+  int maxKey;
   struct FhNode** keyMap;
 };
 

@@ -8,6 +8,7 @@
 #define fhMinNode(fh) (fh->minNode)
 #define fhSize(fh) (fh->size)
 #define fhKeyMap(fh) (fh->keyMap)
+#define fhMaxKey(fh) (fh->maxKey)
 #define fhGetKey(fh, key) ((fhKeyMap(fh))[key])
 
 struct FibonacciHeap*
@@ -17,6 +18,7 @@ fibonacciHeapInit(int maxKey)
   fhTrees(res) = linkedListInit();
   fhMinNode(res) = NULL;
   fhSize(res) = 0;
+  fhMaxKey(res) = maxKey;
   fhKeyMap(res) = (struct FhNode**)malloc(maxKey * sizeof(*(fhKeyMap(res))));
   return res;
 }
@@ -135,8 +137,8 @@ fibonacciHeapMoveToTop(struct FibonacciHeap* fh, struct FhNode* node)
 {
   struct LinkedListNode* llNode = fhNodeLlNodePtr(node);
   struct FhNode* parent = fhNodeParent(node);
-  struct LinkedList* siblings = fhNodeChildren(parent);
-  linkedListMoveNode(siblings, fhTrees(fh), llNode);
+  struct LinkedList* siblings = &fhNodeChildren(parent);
+  linkedListMoveNode(siblings, &fhTrees(fh), llNode);
   fhNodeParent(node) = NULL;
   fhNodeMarked(node) = false;
 }
@@ -182,5 +184,15 @@ fibonacciHeapSize(struct FibonacciHeap* fh)
 void
 fibonacciHeapClear(struct FibonacciHeap* fh)
 {
+  for (int i = 0; i < fhMaxKey(fh); ++i) {
+    struct FhNode* curFhNode = fhGetKey(fh, i);
+    if (NULL == curFhNode) {
+      continue;
+    }
+    struct LinkedListNode* curLlNode = fhNodeLlNodePtr(curFhNode);
+    FhNodeFree(curFhNode);
+    linkedListNodeFree(curLlNode);
+  }
+  free(fhKeyMap(fh));
 }
 
