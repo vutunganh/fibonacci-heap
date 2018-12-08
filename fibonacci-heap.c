@@ -172,7 +172,9 @@ fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority)
   fhNodePriority(node) = newPriority;
   struct FhNode* parent = fhNodeParent(node);
   fibonacciHeapMoveToTop(fh, node);
+  #ifndef NAIVE_FH
   fibonacciHeapCut(fh, parent);
+  #endif
 }
 
 int
