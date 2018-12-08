@@ -27,6 +27,8 @@ void
 linkedListNodeSetSuccessor(struct LinkedListNode* result,
                            struct LinkedListNode* node);
 
+/* WARNING: Doesn't free the wrapped FhNode!
+ */
 void
 linkedListNodeFree(struct LinkedListNode* llNode);
 

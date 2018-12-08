@@ -23,6 +23,12 @@ FhNodeAddChild(struct FhNode* root, struct FhNode* child)
   fhNodeParent(child) = root;
 }
 
+int
+fhNodeOrder(struct FhNode* fhNode)
+{
+  return linkedListSize(&fhNodeChildren(fhNode));
+}
+
 struct FhNode*
 FhNodeMerge(struct FhNode* node1, struct FhNode* node2)
 {

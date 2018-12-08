@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#define llSize(ll) (ll->size)
+
 struct LinkedList
 linkedListInit(void)
 {
@@ -18,13 +20,21 @@ void
 linkedListPushBack(struct LinkedList* linkedList, struct FhNode* fhNode)
 {
   struct LinkedListNode* llNode = linkedListNodeInit(fhNode);
+  fhNodeLlNodePtr(fhNode) = llNode;
+  linkedListPushBackLlNode(linkedList, llNode);
+}
+
+void
+linkedListPushBackLlNode(struct LinkedList* linkedList,
+                         struct LinkedListNode* llNode)
+{
   if (linkedListIsEmpty(linkedList)) {
     llHead(linkedList) = llNode;
   } else {
     linkedListNodeSetSuccessor(llTail(linkedList), llNode);
   }
   llTail(linkedList) = llNode;
-  fhNodeLlNodePtr(fhNode) = llNode;
+  llNodeNext(llNode) = NULL;
   ++llSize(linkedList);
 }
 
@@ -69,6 +79,12 @@ linkedListIsEmpty(struct LinkedList* linkedList)
   }
   #endif
   return NULL == llHead(linkedList) && NULL == llTail(linkedList);
+}
+
+int
+linkedListSize(struct LinkedList* linkedList)
+{
+  return llSize(linkedList);
 }
 
 #define clearLinkedList(linkedList) \
@@ -117,9 +133,6 @@ linkedListMoveNode(struct LinkedList* from, struct LinkedList* to,
                    struct LinkedListNode* node)
 {
   linkedListRemoveNode(from, node);
-  struct FhNode* underlyingFhNode = llNodeFhNode(node);
-  llNodeFhNode(node) = NULL;
-  free(node);
-  linkedListPushBack(to, underlyingFhNode);
+  linkedListPushBackLlNode(to, node);
 }
 

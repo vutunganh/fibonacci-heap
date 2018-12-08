@@ -1,8 +1,9 @@
 CC := clang
 CWARNS := -Wall -pedantic -Wextra
 CDEBUG := -DDEBUG -g
+LFLAGS := -lm
 CFLAGS := -std=c99 -O2 $(CWARNS) $(CDEBUG) $(ARGS)
-OBJFILES := linked-list-node.o linked-list.o fh-node.o
+OBJFILES := linked-list-node.o linked-list.o fh-node.o fibonacci-heap.o
 BINFILES := tester.out
 STUDENT_ID := 64
 
@@ -19,9 +20,9 @@ objfiles: $(OBJFILES)
 	$(CC) $(CFLAGS) $< -c -o $@
 
 %.out: $(OBJFILES)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
-tags:
+tags: *.c *.h
 	ctags -R *.c *.h
 
 .PHONY: clean

@@ -1,6 +1,7 @@
 #include "linked-list-node.h"
 
 #include <stdlib.h>
+#include <assert.h>
 
 struct LinkedListNode*
 linkedListNodeInit(struct FhNode* fhNode)
@@ -22,5 +23,11 @@ linkedListNodeSetSuccessor(struct LinkedListNode* result,
 
   llNodeNext(result) = node;
   llNodePrev(node) = result;
+}
+
+void
+linkedListNodeFree(struct LinkedListNode* linkedList)
+{
+  free(linkedList);
 }
 

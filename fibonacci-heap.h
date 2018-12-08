@@ -9,23 +9,32 @@ struct FibonacciHeap
   struct LinkedList trees;
   struct FhNode* minNode;
   int size;
-  struct FhNode* keyMap;
+  struct FhNode** keyMap;
 };
 
-struct FibonacciHeap
+struct FibonacciHeap*
 fibonacciHeapInit(int maxKey);
 
 void
-fibonacciHeapInsert(struct FibonacciHeap* fh, int key,  int priority);
+fibonacciHeapInsert(struct FibonacciHeap* fh, int key, int priority);
 
-/* Doesn't actually return the minimum, because * it isn't needed for this
- * assignment.
+/* Extracted key and priority will be returned using parameters `minKey` and
+ * `minPriority` respectively.
+ * Returns whether the returned values are valid (= the heap wasn't empty)
+ * or not.
  */
-void
-fibonacciHeapExtractMin(struct FibonacciHeap* fh);
+bool
+fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
+                        int* minPriority);
 
 void
 fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority);
+
+int
+fibonacciHeapSize(struct FibonacciHeap* fh);
+
+void
+fibonacciHeapClear(struct FibonacciHeap* fh);
 
 #endif /* __FIBONACCI_HEAP__ */
 

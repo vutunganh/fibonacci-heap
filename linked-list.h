@@ -7,7 +7,6 @@
 
 #define llHead(ll) (ll->head)
 #define llTail(ll) (ll->tail)
-#define llSize(ll) (ll->size)
 
 struct LinkedList
 {
@@ -22,6 +21,10 @@ linkedListInit(void);
 void
 linkedListPushBack(struct LinkedList* linkedList, struct FhNode* fhNode);
 
+void
+linkedListPushBackLlNode(struct LinkedList* linkedList,
+                         struct LinkedListNode* llNode);
+
 /* !!WARNING: doesn't check if `node` belongs to `linkedList`!!
  * !!WARNING: doesn't free `node`!!
  */
@@ -33,6 +36,9 @@ linkedListRemoveNode(struct LinkedList* linkedList,
  */
 bool
 linkedListIsEmpty(struct LinkedList* linkedList);
+
+int
+linkedListSize(struct LinkedList* linkedList);
 
 /* Appends linked list `linkedList` to `result`.
  */

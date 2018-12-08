@@ -27,7 +27,8 @@ FhNodeInit(int key, int priority);
 
 /* Returns the order of a node of Fibonacci heap.
  */
-#define fhNodeOrder(fhNode) (llSize(fhNode(children(fhNode))))
+int
+fhNodeOrder(struct FhNode* fhNode);
 
 /* The node with larger priority is added as a child to the other one.
  * Returns the pointer to the single resulting root.
