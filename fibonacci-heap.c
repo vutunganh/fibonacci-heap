@@ -57,14 +57,6 @@ void
 fibonacciHeapConsolidate(struct FibonacciHeap* fh)
 {
   int buckets = fhMaxRank(fh) + linkedListSize(&fhTrees(fh)) + 1;
-  /*
-  #ifdef NAIVE_FH
-  int buckets = 2 * ceil(sqrt(fibonacciHeapSize(fh) + 1));
-  #else
-  int buckets = 2 * ceil(log2(fibonacciHeapSize(fh) + 1));
-  #endif
-  */
-
   struct LinkedList* workspace =
     (struct LinkedList*)malloc(buckets * sizeof(*workspace));
   for (int i = 0; i < buckets; ++i) {
