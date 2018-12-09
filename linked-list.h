@@ -40,11 +40,6 @@ linkedListIsEmpty(struct LinkedList* linkedList);
 int
 linkedListSize(struct LinkedList* linkedList);
 
-/* Appends linked list `linkedList` to `result`.
- */
-void
-joinLinkedLists(struct LinkedList* result, struct LinkedList* linkedList);
-
 /* Returns the head of `linkedList` and removes it from `linkedList`.
  */
 struct LinkedListNode*

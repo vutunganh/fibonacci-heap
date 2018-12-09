@@ -1,6 +1,6 @@
 CC := clang
 CWARNS := -Wall -pedantic -Wextra
-CDEBUG :=#-DDEBUG -g -O0
+CDEBUG := -DDEBUG -g -O0
 LFLAGS := -lm
 CFLAGS := -std=c99 -O2 $(CWARNS) $(CDEBUG) $(ARGS)
 OBJFILES := linked-list-node.o linked-list.o fh-node.o fibonacci-heap.o tester.o

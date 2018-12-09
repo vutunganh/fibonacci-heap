@@ -85,35 +85,6 @@ linkedListSize(struct LinkedList* linkedList)
   return llSize(linkedList);
 }
 
-#define clearLinkedList(linkedList) \
-  do { \
-    llHead(linkedList) = NULL; \
-    llTail(linkedList) = NULL; \
-    llSize(linkedList) = 0; \
-  } while(0)
-
-void
-joinLinkedLists(struct LinkedList* result, struct LinkedList* joined)
-{
-  if (linkedListIsEmpty(result)) {
-    *result = *joined;
-    return;
-  }
-  if (linkedListIsEmpty(joined)) {
-    return;
-  }
-  struct LinkedListNode* resultTail = llTail(result);
-  struct LinkedListNode* joinedHead = llHead(joined);
-  linkedListNodeSetSuccessor(resultTail, joinedHead);
-  #ifdef DEBUG
-  /* from the second guard it should hold that NULL != tail(joined) */
-  assert(NULL != llTail(joined));
-  #endif
-  llTail(result) = llTail(joined);
-  llSize(result) += llSize(joined);
-  clearLinkedList(joined);
-}
-
 struct LinkedListNode*
 linkedListPopFront(struct LinkedList* linkedList)
 {
