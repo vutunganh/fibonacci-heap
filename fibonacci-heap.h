@@ -1,6 +1,8 @@
 #ifndef __FIBONACCI_HEAP__
 #define __FIBONACCI_HEAP__
 
+#include <stdint.h>
+
 #include "linked-list-node.h"
 #include "fh-node.h"
 
@@ -14,16 +16,17 @@
 struct FibonacciHeap
 {
   struct LinkedList trees;
-  struct FhNode* minNode;
   int size;
+  struct FhNode* minNode;
   int maxKey;
+  int maxRank;
   struct FhNode** keyMap;
-  int extracts;
-  int extractSteps;
-  int extractMax;
-  int decreases;
-  int decreaseSteps;
-  int decreaseMax;
+  int64_t extracts;
+  int64_t extractSteps;
+  int64_t extractMax;
+  int64_t decreases;
+  int64_t decreaseSteps;
+  int64_t decreaseMax;
 };
 
 struct FibonacciHeap*

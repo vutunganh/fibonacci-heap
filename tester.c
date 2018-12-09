@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 #define OPERATIONS_FILE "operations.in"
 
@@ -27,7 +28,8 @@ main(int argc, char* argv[])
     switch(op) {
       case '#':
         if (NULL != fh) {
-          fprintf(outputStream, "%d %d %d %d %lf %d %d %d %lf\n",
+          fprintf(outputStream, "%d %" PRId64 "%" PRId64 "%" PRId64 "%lf"
+                                "%" PRId64 "%" PRId64 "%" PRId64 "%lf\n",
                   fibonacciHeapSize(fh), fhExtracts(fh), fhExtractSteps(fh),
                   fhExtractMax(fh), 1. * fhExtractSteps(fh) / fhExtracts(fh),
                   fhDecreases(fh), fhDecreaseSteps(fh), fhDecreaseMax(fh),
