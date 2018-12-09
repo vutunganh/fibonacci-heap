@@ -21,7 +21,7 @@ main(int argc, char* argv[])
 
   struct FibonacciHeap* fh = NULL;
   char op;
-  fputs("heap_size extracts extract_steps extract_max extract_avg "
+  fputs("# heap_size extracts extract_steps extract_max extract_avg "
         "decreases decrease_steps decrease_max decrease_avg\n", outputStream);
   while (1 == scanf(" %c", &op)) {
     int a, b;
@@ -30,7 +30,7 @@ main(int argc, char* argv[])
         if (NULL != fh) {
           fprintf(outputStream, "%d %" PRId64 " %" PRId64 " %" PRId64 " %lf"
                                 " %" PRId64 " %" PRId64 " %" PRId64 " %lf\n",
-                  fibonacciHeapSize(fh), fhExtracts(fh), fhExtractSteps(fh),
+                  fhMaxKey(fh), fhExtracts(fh), fhExtractSteps(fh),
                   fhExtractMax(fh), 1. * fhExtractSteps(fh) / fhExtracts(fh),
                   fhDecreases(fh), fhDecreaseSteps(fh), fhDecreaseMax(fh),
                   1. * fhDecreaseSteps(fh) / fhDecreases(fh));

@@ -8,7 +8,6 @@
 #define fhMinNode(fh) (fh->minNode)
 #define fhSize(fh) (fh->size)
 #define fhKeyMap(fh) (fh->keyMap)
-#define fhMaxKey(fh) (fh->maxKey)
 #define fhGetKey(fh, key) ((fhKeyMap(fh))[key])
 #define fhMaxRank(fh) (fh->maxRank)
 

@@ -6,6 +6,7 @@
 #include "linked-list-node.h"
 #include "fh-node.h"
 
+#define fhMaxKey(fh) (fh->maxKey)
 #define fhExtracts(fh) (fh->extracts)
 #define fhExtractSteps(fh) (fh->extractSteps)
 #define fhExtractMax(fh) (fh->extractMax)
