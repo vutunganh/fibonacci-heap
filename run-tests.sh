@@ -22,26 +22,26 @@ fi
 
 set -o pipefail
 
-echo "Running standard uniform test."
-"${GENERATOR}" -s "${STUDENT_ID}" -r | "${BIN_FILE}" "${OUTPUT_DIR}"/standard-uniform.res
-if [ $? -ne 0 ]; then
-  echo "Standard uniform test failed."
-  exit 3
-fi
-echo "Running standard imbalanced test."
-"${GENERATOR}" -s "${STUDENT_ID}" -b | "${BIN_FILE}" "${OUTPUT_DIR}"/standard-imbalanced.res
-if [ $? -ne 0 ]; then
-  echo "Standard imbalanced test failed."
-  exit 3
-fi
+# echo "Running standard uniform test."
+# "${GENERATOR}" -s "${STUDENT_ID}" -r | "${BIN_FILE}" "${OUTPUT_DIR}"/standard-uniform.res
+# if [ $? -ne 0 ]; then
+#   echo "Standard uniform test failed."
+#   exit 3
+# fi
+# echo "Running standard imbalanced test."
+# "${GENERATOR}" -s "${STUDENT_ID}" -b | "${BIN_FILE}" "${OUTPUT_DIR}"/standard-imbalanced.res
+# if [ $? -ne 0 ]; then
+#   echo "Standard imbalanced test failed."
+#   exit 3
+# fi
 echo "Running standard cunning test."
-"${GENERATOR}" -s "${STUDENT_ID}" -x | "${BIN_FILE}" "${OUTPUT_DIR}"/standard-cunning.res
+"${GENERATOR}" -s "${STUDENT_ID}" -x | valgrind "${BIN_FILE}" "${OUTPUT_DIR}"/standard-cunning.res
 if [ $? -ne 0 ]; then
   echo "Standard cunning test failed."
   exit 3
 fi
 echo "Running standard deep test."
-"${GENERATOR}" -s "${STUDENT_ID}" -p | "${BIN_FILE}" "${OUTPUT_DIR}"/standard-deep.res
+"${GENERATOR}" -s "${STUDENT_ID}" -p | valgrind "${BIN_FILE}" "${OUTPUT_DIR}"/standard-deep.res
 if [ $? -ne 0 ]; then
   echo "Standard deep test failed."
   exit 3

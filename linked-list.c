@@ -73,7 +73,7 @@ linkedListIsEmpty(struct LinkedList* linkedList)
 {
   #ifdef DEBUG
   if (NULL == llHead(linkedList) && NULL == llTail(linkedList)) {
-    assert (0 == llSize(linkedList));
+    assert (0 == linkedListSize(linkedList));
   }
   #endif
   return NULL == llHead(linkedList) && NULL == llTail(linkedList);

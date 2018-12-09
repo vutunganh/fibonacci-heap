@@ -1,6 +1,5 @@
 #include "fibonacci-heap.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
@@ -27,6 +26,9 @@ fibonacciHeapInit(int maxKey)
   fhSize(res) = 0;
   fhMaxKey(res) = maxKey;
   fhKeyMap(res) = (struct FhNode**)malloc(maxKey * sizeof(*(fhKeyMap(res))));
+  for (int i = 0; i < maxKey; ++i) {
+    fhGetKey(res, i) = NULL;
+  }
   fhExtracts(res) = 0;
   fhExtractSteps(res) = 0;
   fhExtractMax(res) = 0;
@@ -53,9 +55,9 @@ void
 fibonacciHeapConsolidate(struct FibonacciHeap* fh)
 {
   #ifdef NAIVE_FH
-  int buckets = 10 * ceil(sqrt(fibonacciHeapSize(fh)));
+  int buckets = 10 * ceil(sqrt(fibonacciHeapSize(fh) + 1));
   #else
-  int buckets = 2 * ceil(log2(fibonacciHeapSize(fh)));
+  int buckets = 2 * ceil(log2(fibonacciHeapSize(fh) + 1));
   #endif
 
   struct LinkedList* workspace =
@@ -65,8 +67,7 @@ fibonacciHeapConsolidate(struct FibonacciHeap* fh)
   }
 
   struct LinkedList* rootChildren = &fhTrees(fh);
-
-  struct LinkedListNode* treeIterator = llHead((&fhTrees(fh)));
+  struct LinkedListNode* treeIterator = llHead(rootChildren);
   while (NULL != treeIterator) {
     struct LinkedListNode* tree = treeIterator;
     treeIterator = llNodeNext(treeIterator);
@@ -81,10 +82,13 @@ fibonacciHeapConsolidate(struct FibonacciHeap* fh)
   #ifdef DEBUG
   assert (true == linkedListIsEmpty(rootChildren));
   #endif
-  for (int i = 0; i < buckets - 1; ++i) {
+  for (int i = 0; i < buckets; ++i) {
     struct LinkedList* currentBucket = &workspace[i];
     struct LinkedList* nextBucket = &workspace[i + 1];
     while (linkedListSize(currentBucket) > 1) {
+      #ifdef DEBUG
+      assert(i < buckets - 1);
+      #endif
       struct LinkedListNode* first = linkedListPopFront(currentBucket);
       struct LinkedListNode* second = linkedListPopFront(currentBucket);
       struct FhNode* fhNode1 = llNodeFhNode(first);
@@ -145,10 +149,9 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
   *minPriority = fhNodePriority(minNode);
   int oldExtractSteps = fhExtractSteps(fh);
 
-  /* intentional copy */
-  struct LinkedList childrenOfMin = fhNodeChildren(minNode);
-  fhExtractSteps(fh) += linkedListSize(&childrenOfMin);
-  struct LinkedListNode* childIterator = llHead((&childrenOfMin));
+  struct LinkedList* childrenOfMin = &fhNodeChildren(minNode);
+  fhExtractSteps(fh) += linkedListSize(childrenOfMin);
+  struct LinkedListNode* childIterator = llHead(childrenOfMin);
   /* There is another approach with joining the children with the list of trees
    * directly, but it is too error prone.
    */
@@ -162,10 +165,10 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
   #endif
 
   struct LinkedListNode* llNodeOfMinNode = fhNodeLlNodePtr(minNode);
-  fhGetKey(fh, *minKey) = NULL;
   linkedListRemoveNode(&fhTrees(fh), llNodeOfMinNode);
-  linkedListNodeFree(fhNodeLlNodePtr(minNode));
+  linkedListNodeFree(llNodeOfMinNode);
   FhNodeFree(minNode);
+  fhGetKey(fh, *minKey) = NULL;
 
   --fhSize(fh);
   fibonacciHeapConsolidate(fh);
@@ -238,8 +241,8 @@ fibonacciHeapClear(struct FibonacciHeap* fh)
       continue;
     }
     struct LinkedListNode* curLlNode = fhNodeLlNodePtr(curFhNode);
-    FhNodeFree(curFhNode);
     linkedListNodeFree(curLlNode);
+    FhNodeFree(curFhNode);
   }
   free(fhKeyMap(fh));
   fhKeyMap(fh) = NULL;
