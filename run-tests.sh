@@ -63,3 +63,6 @@ if [ $? -ne 0 ]; then
   exit 4
 fi
 
+tar -czf results.tgz "${OUTPUT_DIR}"
+make clean
+

@@ -31,7 +31,7 @@ tags: *.c *.h
 .PHONY: clean
 
 clean:
-	-rm *.o *.out vgcore.*
+	-rm *.o *.out
 
 fh-node.o: fh-node.c fh-node.h linked-list.h linked-list-node.h \
  type-declarations.h
