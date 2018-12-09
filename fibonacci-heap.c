@@ -162,9 +162,10 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
   #endif
 
   struct LinkedListNode* llNodeOfMinNode = fhNodeLlNodePtr(minNode);
+  fhGetKey(fh, *minKey) = NULL;
   linkedListRemoveNode(&fhTrees(fh), llNodeOfMinNode);
-  free(fhNodeLlNodePtr(minNode));
-  free(minNode);
+  linkedListNodeFree(fhNodeLlNodePtr(minNode));
+  FhNodeFree(minNode);
 
   --fhSize(fh);
   fibonacciHeapConsolidate(fh);
