@@ -151,6 +151,10 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
   int oldExtractSteps = fhExtractSteps(fh);
 
   struct LinkedList* childrenOfMin = &fhNodeChildren(minNode);
+  #ifdef DEBUG
+  int supposedChildrenCnt = linkedListSize(childrenOfMin);
+  int childrenCnt = 0;
+  #endif
   fhExtractSteps(fh) += linkedListSize(childrenOfMin);
   struct LinkedListNode* childIterator = llHead(childrenOfMin);
   while (NULL != childIterator) {
@@ -159,9 +163,13 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
     fhNodeParent(currentChild) = NULL;
     fhNodeMarked(currentChild) = false;
     fhMaxRank(fh) = max(fhMaxRank(fh), fhNodeOrder(currentChild));
+    #ifdef DEBUG
+    ++childrenCnt;
+    #endif
   }
   linkedListJoin(&fhTrees(fh), childrenOfMin);
   #ifdef DEBUG
+  assert(supposedChildrenCnt == childrenCnt);
   assert(0 == linkedListSize(&fhNodeChildren(minNode)));
   #endif
 
