@@ -59,6 +59,10 @@ fibonacciHeapConsolidate(struct FibonacciHeap* fh)
 
   struct LinkedList* workspace =
     (struct LinkedList*)malloc(buckets * sizeof(*workspace));
+  for (int i = 0; i < buckets; ++i) {
+    workspace[i] = linkedListInit();
+  }
+
   struct LinkedList* rootChildren = &fhTrees(fh);
 
   struct LinkedListNode* treeIterator = llHead((&fhTrees(fh)));
@@ -130,6 +134,7 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
   for (struct LinkedListNode* node = llHead((&childrenOfMin)); node != NULL;
        node = llNodeNext(node)) {
     fhNodeMarked(llNodeFhNode(node)) = false;
+    fhNodeParent(llNodeFhNode(node)) = NULL;
   }
 
   linkedListRemoveNode(&fhTrees(fh), fhNodeLlNodePtr(minNode));
@@ -153,6 +158,9 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
 void
 fibonacciHeapMoveToTop(struct FibonacciHeap* fh, struct FhNode* node)
 {
+  if (NULL == fhNodeParent(node)) {
+    return;
+  }
   ++fhDecreaseSteps(fh);
   struct LinkedListNode* llNode = fhNodeLlNodePtr(node);
   struct FhNode* parent = fhNodeParent(node);
@@ -184,19 +192,25 @@ fibonacciHeapCut(struct FibonacciHeap* fh, struct FhNode* node)
 void
 fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority)
 {
+  struct FhNode* node = fhGetKey(fh, key);
+  if (NULL == node) {
+    return;
+  }
+
   ++fhDecreases(fh);
   int oldDecreaseSteps = fhDecreaseSteps(fh);
 
-  struct FhNode* node = fhGetKey(fh, key);
   if (newPriority >= fhNodePriority(node)) {
     return;
   }
   fhNodePriority(node) = newPriority;
   struct FhNode* parent = fhNodeParent(node);
-  fibonacciHeapMoveToTop(fh, node);
-  #ifndef NAIVE_FH
-  fibonacciHeapCut(fh, parent);
-  #endif
+  if (NULL != parent) {
+    fibonacciHeapMoveToTop(fh, node);
+    #ifndef NAIVE_FH
+    fibonacciHeapCut(fh, parent);
+    #endif
+  }
 
   fhDecreaseMax(fh) = max(fhDecreaseMax(fh),
                           fhDecreaseSteps(fh) - oldDecreaseSteps);
@@ -222,5 +236,6 @@ fibonacciHeapClear(struct FibonacciHeap* fh)
   }
   free(fhKeyMap(fh));
   fhKeyMap(fh) = NULL;
+  free(fh);
 }
 

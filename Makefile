@@ -1,6 +1,6 @@
 CC := clang
 CWARNS := -Wall -pedantic -Wextra
-CDEBUG := -DDEBUG -g
+CDEBUG :=#-DDEBUG -g -O0
 LFLAGS := -lm
 CFLAGS := -std=c99 -O2 $(CWARNS) $(CDEBUG) $(ARGS)
 OBJFILES := linked-list-node.o linked-list.o fh-node.o fibonacci-heap.o tester.o
@@ -31,7 +31,7 @@ tags: *.c *.h
 .PHONY: clean
 
 clean:
-	rm *.o *.out
+	-rm *.o *.out vgcore.*
 
 fh-node.o: fh-node.c fh-node.h linked-list.h linked-list-node.h \
  type-declarations.h
