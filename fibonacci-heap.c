@@ -95,7 +95,7 @@ fibonacciHeapConsolidate(struct FibonacciHeap* fh)
       ++fhExtractSteps(fh);
       linkedListPushBack(nextBucket, mergeResult);
     }
-    if (linkedListSize(currentBucket) == 1) {
+    if (1 == linkedListSize(currentBucket)) {
       linkedListMoveNode(currentBucket, &fhTrees(fh), llHead(currentBucket));
     }
   }

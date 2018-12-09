@@ -13,4 +13,7 @@ vgcore.*
 *.tgz
 tags
 generator
+*.aux
+*.bbl
+*.blg
 
