@@ -1,0 +1,14 @@
+#!/usr/bin/env gnuplot
+
+set xlabel "Počet prvků v haldě"
+
+set terminal pdf
+
+set logscale x
+set logscale y
+# set xtics rotate
+# set format x "%.1t*10^{%S}"
+
+set style data lines
+# set key outside
+

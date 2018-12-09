@@ -1,0 +1,13 @@
+#!/usr/bin/env gnuplot
+
+load 'settings.gpi'
+
+set title 'Průměrný počet kroků operace ExtractMin v zákeřném testu'
+set ylabel 'Průměrný počet kroků'
+set output 'graph-2.pdf'
+unset logscale x
+unset logscale y
+
+plot 'standard-cunning.res' using 1:5 title 'Standardní Fib. halda', \
+     'naive-cunning.res' using 1:5 title 'Naivní Fib. halda'
+

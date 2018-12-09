@@ -1,0 +1,13 @@
+#!/usr/bin/env gnuplot
+
+load 'settings.gpi'
+
+set title 'Průměrný počet kroků operace ExtractMin standardní Fib. haldy'
+set xlabel 'Počet prvků v haldě, log. měřítko'
+set ylabel 'Průměrný počet kroků, log. měřítko'
+set output 'standard-imbalanced-avg-steps.pdf'
+set xtics rotate
+unset logscale x
+unset logscale y
+
+plot 'standard-imbalanced.res' using 1:5 title 'Nevyvážený test'

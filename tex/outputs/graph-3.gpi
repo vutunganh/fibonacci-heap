@@ -1,0 +1,14 @@
+#!/usr/bin/env gnuplot
+
+load 'settings.gpi'
+
+set title 'Operace ExtractMin v hlubokém testu'
+set xlabel 'Počet prvků v haldě, log. měřítko'
+set ylabel 'Log. měřítko'
+set output 'graph-3.pdf'
+
+plot 'standard-deep.res' using 1:4 title 'Max. # kroků, standardní Fib. halda', \
+     'standard-deep.res' using 1:5 title 'Průměrný # kroků, standardní Fib. halda', \
+     'naive-deep.res' using 1:4 title 'Max. # kroků, naivní Fib. halda', \
+     'naive-deep.res' using 1:5 title 'Průměrný # kroků, naivní Fib. halda'
+

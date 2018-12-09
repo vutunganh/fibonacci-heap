@@ -1,0 +1,61 @@
+\input style.tex
+
+\sec Úvod
+
+Program je implementován v~programovacím jazyce C.
+Měření bylo provedeno na školním počítači s~procesorem Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz, 16 GB paměti RAM a~operačním systémem Gentoo Linux.
+Program je přeložen kompilátorem clang verze 7.0.0 s~přepínači {\tt -std=c99 -O2}.
+
+Implementace se v~některých místech liší od přednášené verze.
+Operace {\algo insert} rovnou vkládá přidávaný prvek do haldy, nezdržuje se tvorbou jednoprvkové haldy a~{\algo mergováním}.
+Při {\algo extract minu} se potomci odebíraného vrcholu připojí do seznamu haldových stromů najednou jako sjednocení dvou spojových seznamů místo postupného vkládání.
+V~konsolidaci se velikost pole pro jednotlivé řády haldových stromů neurčuje z~počtu prvků haldy, ale spočítá se jako {\tt maximální řád haldových stromů + počet stromů + 1}.
+Informace o maximálním řádu haldových stromů se průběžně počítá po operacích {\algo extract minu} a {\algo decrease key}.
+Operací {\algo FHCut} se v~implementaci myslí něco jiného než popis v~\cite[pruvodce], jde přímo o odtržení syna od rodiče.
+
+Pokud se v~operaci {\algo decrease key} priorita klíče nesnížila (tzn. \uv{snižuje} se na hodnotu, která je stále větší než původní), pak se tato operace nepočítá jako provedený {\algo decrease key}.
+To může ovlivnit některé výsledky měření.
+
+\sec Rovnoměrný a nevyvážený test
+
+Rovnoměrný test provádí rovnoměrně mnoho operací {\algo insert}, {\algo extract min} a {\algo decrease}, zatímco nevyvážený test při stejném počtu operací provádí řádově více operací~{\algo decrease}.
+
+Měření standardní Fibonacciho haldy je v grafu~\ref[standard-avg-steps].
+Pro přehlednost je graf rozdělen na dva grafy~\ref[standard-uniform-avg-steps] a \ref[standard-imbalanced-avg-steps].
+V~uniformním testu složitost stoupá logaritmicky, což odpovídá tomu, že amortizovaná složitost operace {\algo extract min} je logaritmická.
+V~nevyváženém naměřené hodnoty oscilují, což nejspíše způsobil generátor.
+Výsledek úplně neodpovídá očekávání -- na první pohled bychom si řekli, že pokud je provedeno \uv{více konstantních operací} na úkor logaritmických operací, tak by počet kroků měl být menší.
+Počet kroků v operaci {\algo extract min} je ovlivněn počtem synů extrahovaného vrcholu a počet stromů v haldě.
+Nezdá se, že by generátor cíleně extrahoval vrcholy s velkým počtem synů, proto se zaměřme na počet stromů v haldě.
+Většina operací {\algo decrease} (z~pohledu statistiky, ne generátoru) bude mířit na vrcholy, které nejsou v~kořenech, a přidají strom do seznamu haldových stromů.
+Jelikož se nevyvážený test od rovnoměrného testu liší v počtu operací {\algo decrease}, pak rozdíl můžeme odůvodnit tím, že ačkoliv počty kroků strávené odtrháváním synů od extrahovaného vrcholu budou v obou testech srovnatelné, počet haldových stromů v konsolidaci bude řádově více.
+
+\inspicwcap{outputs/graph-1.pdf}{standard-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy.}
+
+\inspicwcap{outputs/standard-uniform-avg-steps.pdf}{standard-uniform-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy v uniformním testu.}
+
+\inspicwcap{outputs/standard-imbalanced-avg-steps.pdf}{standard-imbalanced-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy v nevyváženém testu.}
+
+\sec Zákeřný test
+
+Měření zákeřného testu je v grafu~\ref[cunning].
+V~tomto testu se zdá, že obě haldy fungují téměř stejně, což je špatně, příčinu chyby se však nepodařilo najít.
+To však nebrání tomu, abychom si popsali, co se v~zákeřném testu děje.
+
+V~zákeřném testu generátor vytváří haldu na $n$ prvcích, kde soubor stromů obsahuje stromy izomorfní hvězdám~$S_0, S_1, \ldots, S_{\Theta(\sqrt{n})}$, což lze vyčíst z článku~\cite[fib], který je přiložený v generátoru.
+To je možné jenom díky tomu, že naivní verze Fibonacciho haldy dovolí, aby stromy měly takový tvar, z~přednášky víme, že v korektním stromě má $i$-tý syn alespoň $i-2$ synů, což se v~naivní variantě nemusí dít.
+Tvorba hvězdy~$S_n$ ani není (myšlenkově) náročná, stačí vytvořit dvě hvězdy~$S_{n-1}$, konsolidací donutit, aby se {\algo zmergovaly} a následně vyškubat všechno, co přebývá.
+V této haldě pak operace {\algo extract min} trvá $\Omega(\sqrt{n})$, kde $n$ je počet prvků haldy.
+
+\inspicwcap{outputs/graph-2.pdf}{cunning}{Průměrný počet kroků operace {\algo extract min} v zákeřném testu.}
+
+\sec Hluboký test
+
+V~hlubokém testu generátor vytváří haldu o $n$ prvích, kde jeden strom je izomorfní cestě na $\Theta(n)$ vrcholech.
+
+\sec Literatura
+
+\usebibtex{bib}{alpha}
+
+\bye
+
