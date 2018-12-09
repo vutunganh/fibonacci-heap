@@ -50,18 +50,6 @@ fi
 make clean
 make ARGS=-DNAIVE_FH
 
-echo "Running naive uniform test."
-"${GENERATOR}" -s "${STUDENT_ID}" -r | "${BIN_FILE}" "${OUTPUT_DIR}"/naive-uniform.res
-if [ $? -ne 0 ]; then
-  echo "Naive uniform test failed."
-  exit 4
-fi
-echo "Running naive imbalanced test."
-"${GENERATOR}" -s "${STUDENT_ID}" -b | "${BIN_FILE}" "${OUTPUT_DIR}"/naive-imbalanced.res
-if [ $? -ne 0 ]; then
-  echo "Naive imbalaned test failed."
-  exit 4
-fi
 echo "Running naive cunning test."
 "${GENERATOR}" -s "${STUDENT_ID}" -x | "${BIN_FILE}" "${OUTPUT_DIR}"/naive-cunning.res
 if [ $? -ne 0 ]; then

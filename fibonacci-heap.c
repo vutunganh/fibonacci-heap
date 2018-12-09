@@ -110,7 +110,7 @@ fibonacciHeapConsolidate(struct FibonacciHeap* fh)
 void
 fibonacciHeapRecalculateMinimum(struct FibonacciHeap* fh)
 {
-  int minimumPriority = (1<<30);
+  int minimumPriority = (1 << 30);
   fhMinNode(fh) = NULL;
   for (struct LinkedListNode* node = llHead((&fhTrees(fh)));
        NULL != node; node = llNodeNext(node)) {
@@ -153,14 +153,13 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
   struct LinkedList* childrenOfMin = &fhNodeChildren(minNode);
   fhExtractSteps(fh) += linkedListSize(childrenOfMin);
   struct LinkedListNode* childIterator = llHead(childrenOfMin);
-  /* There is another approach with joining the children with the list of trees
-   * directly, but it is too error prone.
-   */
   while (NULL != childIterator) {
-    struct LinkedListNode* currentChild = childIterator;
+    struct FhNode* currentChild = llNodeFhNode(childIterator);
     childIterator = llNodeNext(childIterator);
-    fibonacciHeapMoveToTop(fh, llNodeFhNode(currentChild));
+    fhNodeParent(currentChild) = NULL;
+    fhNodeMarked(currentChild) = false;
   }
+  linkedListJoin(&fhTrees(fh), childrenOfMin);
   #ifdef DEBUG
   assert(0 == linkedListSize(&fhNodeChildren(minNode)));
   #endif
@@ -206,13 +205,13 @@ fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority)
   if (NULL == node) {
     return;
   }
+  if (newPriority >= fhNodePriority(node)) {
+    return;
+  }
 
   ++fhDecreases(fh);
   int oldDecreaseSteps = fhDecreaseSteps(fh);
 
-  if (newPriority >= fhNodePriority(node)) {
-    return;
-  }
   fhNodePriority(node) = newPriority;
   struct FhNode* parent = fhNodeParent(node);
   if (NULL != parent) {

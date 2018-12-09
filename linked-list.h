@@ -52,5 +52,10 @@ void
 linkedListMoveNode(struct LinkedList* from, struct LinkedList* to,
                    struct LinkedListNode* node);
 
+/* Appends `joined` to `result`.
+ */
+void
+linkedListJoin(struct LinkedList* result, struct LinkedList* joined);
+
 #endif /* __LINKED_LIST__ */
 

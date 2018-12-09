@@ -47,6 +47,14 @@ fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority);
 int
 fibonacciHeapSize(struct FibonacciHeap* fh);
 
+/* Current implementation of clear is "slow" and cheating.
+ *
+ * Slowness dependeds of the "density" of the heap, if the
+ * `size` / `maxKey` ratio is high, then it is quite fast, because it doesn't
+ * need to traverse the complex structure of the heap.
+ * The maximum `maxKey` is around 4 * 10^6 though, so this will only take
+ * a few seconds.
+ */
 void
 fibonacciHeapClear(struct FibonacciHeap* fh);
 

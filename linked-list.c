@@ -1,6 +1,7 @@
 #include "linked-list.h"
 #include "fh-node.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 
@@ -30,6 +31,7 @@ linkedListPushBackLlNode(struct LinkedList* linkedList,
 {
   if (linkedListIsEmpty(linkedList)) {
     llHead(linkedList) = llNode;
+    llNodePrev(llNode) = NULL;
   } else {
     linkedListNodeSetSuccessor(llTail(linkedList), llNode);
   }
@@ -103,5 +105,29 @@ linkedListMoveNode(struct LinkedList* from, struct LinkedList* to,
 {
   linkedListRemoveNode(from, node);
   linkedListPushBackLlNode(to, node);
+}
+
+void
+linkedListJoin(struct LinkedList* result, struct LinkedList* joined)
+{
+  if (true == linkedListIsEmpty(joined)) {
+    return;
+  }
+  if (true == linkedListIsEmpty(result)) {
+    struct LinkedList* tmp = result;
+    result = joined;
+    joined = tmp;
+    return;
+  }
+  #ifdef DEBUG
+  assert(!linkedListIsEmpty(result) && !linkedListIsEmpty(joined));
+  #endif
+
+  struct LinkedListNode* resultTail = llTail(result);
+  struct LinkedListNode* joinedHead = llHead(joined);
+  linkedListNodeSetSuccessor(resultTail, joinedHead);
+  llTail(result) = llTail(joined);
+  llSize(result) += llSize(joined);
+  *joined = linkedListInit();
 }
 
