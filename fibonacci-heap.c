@@ -98,6 +98,11 @@ fibonacciHeapConsolidate(struct FibonacciHeap* fh)
     if (1 == linkedListSize(currentBucket)) {
       linkedListMoveNode(currentBucket, &fhTrees(fh), llHead(currentBucket));
     }
+    #ifdef DEBUG
+    else {
+      assert(0 == linkedListSize(currentBucket));
+    }
+    #endif
   }
 
   free(workspace);

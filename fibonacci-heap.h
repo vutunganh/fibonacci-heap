@@ -56,8 +56,8 @@ fibonacciHeapSize(struct FibonacciHeap* fh);
  * Slowness dependeds of the "density" of the heap, if the
  * `size` / `maxKey` ratio is high, then it is quite fast, because it doesn't
  * need to traverse the complex structure of the heap.
- * The maximum `maxKey` is around 4 * 10^6 though, so this will only take
- * a few seconds.
+ * The maximum `maxKey` is around 10^7 though, so this will only take
+ * a few seconds at most and is still comparable to traversing the heap.
  */
 void
 fibonacciHeapClear(struct FibonacciHeap* fh);
