@@ -111,6 +111,7 @@ void
 fibonacciHeapRecalculateMinimum(struct FibonacciHeap* fh)
 {
   int minimumPriority = (1<<30);
+  fhMinNode(fh) = NULL;
   for (struct LinkedListNode* node = llHead((&fhTrees(fh)));
        NULL != node; node = llNodeNext(node)) {
     int currentPriority = fhNodePriority(llNodeFhNode(node));
