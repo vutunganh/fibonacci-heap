@@ -28,6 +28,14 @@ objfiles: $(OBJFILES)
 tags: *.c *.h
 	ctags -R *.c *.h
 
+package:
+	mv fibgen.c .fibgen.c
+	mkdir vu-tung-anh
+	cp *.c *.h Makefile run-tests.sh vu-tung-anh
+	tar -czf vu-tung-anh.tgz vu-tung-anh
+	rm -r vu-tung-anh
+	mv .fibgen.c fibgen.c
+
 .PHONY: clean
 
 clean:

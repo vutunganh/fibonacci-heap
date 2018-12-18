@@ -10,6 +10,7 @@
 #define fhKeyMap(fh) (fh->keyMap)
 #define fhGetKey(fh, key) ((fhKeyMap(fh))[key])
 #define fhMaxRank(fh) (fh->maxRank)
+#define fhGetMin(fh) (fhNodePriority(fhMinNode(fh)))
 
 int
 max(int a, int b)
@@ -139,6 +140,10 @@ fibonacciHeapMoveToTop(struct FibonacciHeap* fh, struct FhNode* node)
   fhNodeParent(node) = NULL;
   fhNodeMarked(node) = false;
   fhMaxRank(fh) = max(fhMaxRank(fh), fhNodeOrder(node));
+  int curPriority = fhNodePriority(node);
+  if (curPriority < fhGetMin(fh)) {
+    fhMinNode(fh) = node;
+  }
 }
 
 bool

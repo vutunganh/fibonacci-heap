@@ -22,8 +22,8 @@ Rovnoměrný test provádí rovnoměrně mnoho operací {\algo insert}, {\algo e
 
 Měření standardní Fibonacciho haldy je v grafu~\ref[standard-avg-steps].
 Pro přehlednost je graf rozdělen na dva grafy~\ref[standard-uniform-avg-steps] a \ref[standard-imbalanced-avg-steps].
-V~uniformním testu složitost stoupá logaritmicky, což odpovídá tomu, že amortizovaná složitost operace {\algo extract min} je logaritmická.
-V~nevyváženém naměřené hodnoty oscilují, což nejspíše způsobil generátor.
+V~obou testech složitost stoupá logaritmicky, což odpovídá tomu, že amortizovaná složitost operace {\algo extract min} je logaritmická.
+Oscilaci grafu nejspíše způsobil generátor.
 Výsledek úplně neodpovídá očekávání -- na první pohled bychom si řekli, že pokud je provedeno \uv{více konstantních operací} na úkor logaritmických operací, tak by počet kroků měl být menší.
 Počet kroků v operaci {\algo extract min} je ovlivněn počtem synů extrahovaného vrcholu a počet stromů v haldě.
 Nezdá se, že by generátor cíleně extrahoval vrcholy s velkým počtem synů, proto se zaměřme na počet stromů v haldě.
@@ -32,9 +32,9 @@ Jelikož se nevyvážený test od rovnoměrného testu liší v počtu operací 
 
 \inspicwcap{outputs/graph-1.pdf}{standard-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy.}
 
-\inspicwcap{outputs/standard-uniform-avg-steps.pdf}{standard-uniform-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy v uniformním testu.}
+\inspicwcap{outputs/standard-uniform-avg-steps.pdf}{standard-uniform-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy v~uniformním testu.}
 
-\inspicwcap{outputs/standard-imbalanced-avg-steps.pdf}{standard-imbalanced-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy v nevyváženém testu.}
+\inspicwcap{outputs/standard-imbalanced-avg-steps.pdf}{standard-imbalanced-avg-steps}{Průměrný počet kroků operace {\algo extract min} standardní Fib. haldy v~nevyváženém testu.}
 
 \sec Zákeřný test
 
@@ -46,12 +46,26 @@ V~zákeřném testu generátor vytváří haldu na $n$ prvcích, kde soubor stro
 To je možné jenom díky tomu, že naivní verze Fibonacciho haldy dovolí, aby stromy měly takový tvar, z~přednášky víme, že v korektním stromě má $i$-tý syn alespoň $i-2$ synů, což se v~naivní variantě nemusí dít.
 Tvorba hvězdy~$S_n$ ani není (myšlenkově) náročná, stačí vytvořit dvě hvězdy~$S_{n-1}$, konsolidací donutit, aby se {\algo zmergovaly} a následně vyškubat všechno, co přebývá.
 V této haldě pak operace {\algo extract min} trvá $\Omega(\sqrt{n})$, kde $n$ je počet prvků haldy.
+To je vynuceno tím, že se přidají dva prvky~$v_1$ a $v_2$, kde $p(v_1)$ je minimum a $p(v_2)$ je druhá nejmenší priorita, $p$ označuje prioritu vrcholu.
+Poté se oba extrahují, po první extrakci se pod vrchol $v_2$ napojí všechny stromy a po druhé extrakci máme opět soubor hvězd.
+To v~naivní Fibonacciho haldě zjevně vynutí $\Omega(\sqrt{n})$ kroků.
+Podotkněme, že cyklus dvou {\algo insertů} a {\algo extract minů} je proveden exponenciálně-krát, aby se tento efekt do grafu projevil.
 
-\inspicwcap{outputs/graph-2.pdf}{cunning}{Průměrný počet kroků operace {\algo extract min} v zákeřném testu.}
+\inspicwcap{outputs/graph-2.pdf}{cunning}{Průměrný počet kroků operace {\algo extract min} v~zákeřném testu. {\bf Tento graf není správný.} Příčinu chyby se nepodařilo najít.}
 
 \sec Hluboký test
 
-V~hlubokém testu generátor vytváří haldu o $n$ prvích, kde jeden strom je izomorfní cestě na $\Theta(n)$ vrcholech.
+Výsledky měření tohoto testu jsou v grafech~\ref[deep-extract] a \ref[deep-decrease].
+V~hlubokém testu generátor vytváří haldu o $n$ prvcích, kde jeden strom je izomorfní cestě na $\Theta(n)$ vrcholech a poté provede {\algo decrease} na list cesty.
+Na cvičeních jsme si ukazovali, že tvorba cesty způsobí, že všechny vrcholy na této cestě budou označené.
+Provedení operace {\algo decrease} ve standardní variantě na list této cesty způsobí {\algo FHCut} na každý vrchol této cesty, zatímco v naivní variantě se odtrhne pouze list.
+To také odpovídá tomu, že maximální počet kroků roste lineárně a vysvětluje, proč v~tomto testu má naivní varianta lepší operaci {\algo decrease}.
+Maximální počet kroků operace {\algo extract min} také stoupá lineárně, což je nejspíše způsobeno konsolidací jednoprvkových vrcholů, které vznikly po provedení {\algo FHCut} na všech vrcholech cesty a jejich přesunem do seznamu stromů.
+Průměry jsou si však velmi podobné, tento jev je tedy spíše anomálií než pravidlo.
+
+\inspicwcap{outputs/graph-3.pdf}{deep-extract}{Průměrný počet kroků operace {\algo extract min} v~hlubokém testu.}
+
+\inspicwcap{outputs/graph-4.pdf}{deep-decrease}{Průměrný počet kroků operace {\algo decrease} v~hlubokém testu.}
 
 \sec Literatura
 
