@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define ahHeap(ah) (ah->heap)
 #define ahGetKey(ah, key) (ahHeap(ah))[key]
@@ -40,8 +41,10 @@ arrayHeapFindMin(struct ArrayHeap* ah, int* const minKey,
 {
   int resPrio = 1 << 29;
   int resKey = -1;
-  for (int i = 0; i < ahMaxKey(ah); ++i) {
+  const int upTo = ahMaxKey(ah);
+  for (int i = 0; i < upTo; ++i) {
     int cur = ahGetKey(ah, i);
+    assert(i < upTo);
     if (-1 < cur && cur < resPrio) {
       resPrio = cur;
       resKey = i;

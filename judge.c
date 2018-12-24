@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <time.h>
 
-#define MAX_TESTS 100000
+#define MAX_TESTS 100
 #define MAX_KEY (1<<14)
 #define MAX_PRIORITY (1<<14)
 #define OP_INSERT 0
@@ -76,14 +76,14 @@ main(int argc, char* argv[])
       arrayHeapInsert(ah, newKey, newPriority);
       fibonacciHeapInsert(fh, newKey, newPriority);
     } else if (OP_EXTRACT == op) {
-      int ahKey, ahPrio;
+      int ahKey = -1, ahPrio = -1;
       bool status;
       fputs("M\n", operationsStream);
       status = arrayHeapExtract(ah, &ahKey, &ahPrio);
       if (!status) {
         assert(0 == fibonacciHeapSize(fh));
       }
-      int fhKey, fhPrio;
+      int fhKey = -1, fhPrio = -1;
       fibonacciHeapExtractMin(fh, &fhKey, &fhPrio);
       if (fhPrio != ahPrio) {
         fprintf(stderr, "Mismatch between extracts!\n"

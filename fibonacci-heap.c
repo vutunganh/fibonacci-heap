@@ -201,6 +201,11 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
   --fhSize(fh);
   fibonacciHeapConsolidate(fh);
   fibonacciHeapRecalculateMinimum(fh);
+  #ifdef DEBUG
+  if (0 == fhSize(fh)) {
+    assert(NULL == fhMinNode(fh));
+  }
+  #endif
 
   fhExtractMax(fh) = max(fhExtractMax(fh), fhExtractSteps(fh) - oldExtractSteps);
   return true;

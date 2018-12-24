@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <inttypes.h>
 
-#define OPERATIONS_FILE "operations.in"
-
 int
 main(int argc, char* argv[])
 {
@@ -15,9 +13,6 @@ main(int argc, char* argv[])
   }
 
   FILE* outputStream = fopen(argv[1], "w");
-  #ifdef DEBUG
-  FILE* opStream = fopen(OPERATIONS_FILE, "w");
-  #endif
 
   struct FibonacciHeap* fh = NULL;
   char op;
@@ -37,29 +32,17 @@ main(int argc, char* argv[])
           fibonacciHeapClear(fh);
         }
         scanf(" %d", &a);
-        #ifdef DEBUG
-        fprintf(opStream, "%c %d\n", op, a);
-        #endif
         fh = fibonacciHeapInit(a);
         break;
       case 'I':
         scanf(" %d %d", &a, &b);
-        #ifdef DEBUG
-        fprintf(opStream, "%c %d %d\n", op, a, b);
-        #endif
         fibonacciHeapInsert(fh, a, b);
         break;
       case 'M':
-        #ifdef DEBUG
-        fprintf(opStream, "%c\n", op);
-        #endif
         fibonacciHeapExtractMin(fh, &a, &b);
         break;
       case 'D':
         scanf(" %d %d", &a, &b);
-        #ifdef DEBUG
-        fprintf(opStream, "%c %d %d\n", op, a, b);
-        #endif
         fibonacciHeapDecreaseKey(fh, a, b);
         break;
       default:
@@ -70,9 +53,6 @@ main(int argc, char* argv[])
 
   fibonacciHeapClear(fh);
   fclose(outputStream);
-  #ifdef DEBUG
-  fclose(opStream);
-  #endif
 
   return 0;
 }
