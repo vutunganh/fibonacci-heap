@@ -1,5 +1,6 @@
 #include "fibonacci-heap.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
@@ -22,12 +23,20 @@ struct FibonacciHeap*
 fibonacciHeapInit(int maxKey)
 {
   struct FibonacciHeap* res = (struct FibonacciHeap*)malloc(sizeof *res);
+  if (NULL == res) {
+    fputs("Couldn't allocate Fibonacci heap.", stderr);
+    exit(1);
+  }
   fhTrees(res) = linkedListInit();
   fhSize(res) = 0;
   fhMinNode(res) = NULL;
   fhMaxKey(res) = maxKey;
   fhMaxRank(res) = 1;
   fhKeyMap(res) = (struct FhNode**)malloc(maxKey * sizeof(*(fhKeyMap(res))));
+  if (NULL == fhKeyMap(res)) {
+    fputs("Max key for Fibonacci heap too large.", stderr);
+    exit(2);
+  }
   for (int i = 0; i < maxKey; ++i) {
     fhGetKey(res, i) = NULL;
   }
@@ -246,7 +255,7 @@ fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority)
 }
 
 int
-fibonacciHeapSize(struct FibonacciHeap* fh)
+fibonacciHeapSize(const struct FibonacciHeap* fh)
 {
   return fhSize(fh);
 }
@@ -268,3 +277,8 @@ fibonacciHeapClear(struct FibonacciHeap* fh)
   free(fh);
 }
 
+bool
+fibonacciHeapKeyExists(const struct FibonacciHeap* fh, int key)
+{
+  return NULL != fhGetKey(fh, key);
+}

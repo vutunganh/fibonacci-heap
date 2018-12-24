@@ -3,8 +3,9 @@ CWARNS := -Wall -pedantic -Wextra
 CDEBUG :=#-DDEBUG -g -O0
 LFLAGS := -lm
 CFLAGS := -std=c99 -O2 $(CWARNS) $(CDEBUG) $(ARGS)
-OBJFILES := linked-list-node.o linked-list.o fh-node.o fibonacci-heap.o tester.o
-BINFILES := tester.out
+OBJFILES := linked-list-node.o linked-list.o fh-node.o fibonacci-heap.o \
+  array-heap.o
+BINFILES := tester.out judge.out
 STUDENT_ID := 64
 
 build: binfiles
@@ -22,7 +23,7 @@ objfiles: $(OBJFILES)
 %.o: %.c
 	$(CC) $(CFLAGS) $< -c -o $@
 
-%.out: $(OBJFILES)
+%.out: $(OBJFILES) %.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LFLAGS)
 
 tags: *.c *.h

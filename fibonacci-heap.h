@@ -2,6 +2,7 @@
 #define __FIBONACCI_HEAP__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "linked-list-node.h"
 #include "fh-node.h"
@@ -49,7 +50,7 @@ void
 fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority);
 
 int
-fibonacciHeapSize(struct FibonacciHeap* fh);
+fibonacciHeapSize(const struct FibonacciHeap* fh);
 
 /* Current implementation of clear is "slow" and cheating.
  *
@@ -62,5 +63,9 @@ fibonacciHeapSize(struct FibonacciHeap* fh);
 void
 fibonacciHeapClear(struct FibonacciHeap* fh);
 
+/* Detects if key `key` exists. Used for testing.
+ */
+bool
+fibonacciHeapKeyExists(const struct FibonacciHeap* fh, int key);
 #endif /* __FIBONACCI_HEAP__ */
 
