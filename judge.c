@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <time.h>
 
-#define MAX_TESTS 100
+#define MAX_TESTS 1000000
 #define MAX_KEY (1<<14)
 #define MAX_PRIORITY (1<<14)
 #define OP_INSERT 0
@@ -17,18 +17,6 @@
 #define OP_DECREASE 2
 
 FILE* operationsStream = NULL;
-
-bool
-keyPresent(const int* const array, const int size, const int key)
-{
-  for (int i = 0; i < size; ++i) {
-    if (key == array[i]) {
-      return true;
-    }
-  }
-
-  return false;
-}
 
 int
 main(int argc, char* argv[])
@@ -73,8 +61,13 @@ main(int argc, char* argv[])
 
       int newPriority = rand() % MAX_PRIORITY;
       fprintf(operationsStream, "I %d %d\n", newKey, newPriority);
-      arrayHeapInsert(ah, newKey, newPriority);
+      int ahStatus = arrayHeapInsert(ah, newKey, newPriority);
       fibonacciHeapInsert(fh, newKey, newPriority);
+      if (1 == ahStatus) {
+        if (fhGetMin(fh) != newPriority) {
+          fputs("Newly added element should've been the minimum!\n", stderr);
+        }
+      }
     } else if (OP_EXTRACT == op) {
       int ahKey = -1, ahPrio = -1;
       bool status;
@@ -106,6 +99,7 @@ main(int argc, char* argv[])
 
   arrayHeapClear(ah);
   fibonacciHeapClear(fh);
+  fputs("Tests passed.\n", stderr);
 
   return 0;
 }

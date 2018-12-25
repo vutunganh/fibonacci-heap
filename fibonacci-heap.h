@@ -7,6 +7,8 @@
 #include "linked-list-node.h"
 #include "fh-node.h"
 
+#define fhMinNode(fh) (fh->minNode)
+#define fhGetMin(fh) (fhNodePriority(fhMinNode(fh)))
 #define fhMaxKey(fh) (fh->maxKey)
 #define fhExtracts(fh) (fh->extracts)
 #define fhExtractSteps(fh) (fh->extractSteps)

@@ -6,12 +6,10 @@
 #include <math.h>
 
 #define fhTrees(fh) (fh->trees)
-#define fhMinNode(fh) (fh->minNode)
 #define fhSize(fh) (fh->size)
 #define fhKeyMap(fh) (fh->keyMap)
 #define fhGetKey(fh, key) ((fhKeyMap(fh))[key])
 #define fhMaxRank(fh) (fh->maxRank)
-#define fhGetMin(fh) (fhNodePriority(fhMinNode(fh)))
 
 int
 max(int a, int b)
@@ -35,7 +33,7 @@ fibonacciHeapInit(int maxKey)
   fhKeyMap(res) = (struct FhNode**)malloc(maxKey * sizeof(*(fhKeyMap(res))));
   if (NULL == fhKeyMap(res)) {
     fputs("Max key for Fibonacci heap too large.", stderr);
-    exit(2);
+    exit(1);
   }
   for (int i = 0; i < maxKey; ++i) {
     fhGetKey(res, i) = NULL;

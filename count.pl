@@ -6,6 +6,7 @@ use warnings;
 my $file = $ARGV[0];
 open(my $fh, '<', $file);
 my $count = 0;
+my $ln = 1;
 
 while (<$fh>) {
   chomp;
@@ -15,7 +16,8 @@ while (<$fh>) {
   } elsif ($first eq 'M' && $count > 0) {
     --$count;
   }
-  print "$count\n";
+  print "$ln: $count\n";
+  ++$ln;
 }
 
 close($fh);
