@@ -83,7 +83,7 @@ main(void)
         ahGetKey(ah, fhKey) = -1;
       }
     } else {
-      bool forceDecrease = (rand() % 4) != 0;
+      bool forceDecrease = (rand() % (1 << 5)) != 0;
       int key = rand() % MAX_KEY;
       if (forceDecrease && !arrayHeapEmpty(ah)) {
         for (int i = 0; i < MAX_KEY; ++i) {
