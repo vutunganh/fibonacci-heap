@@ -10,7 +10,8 @@ Implementace se v~některých místech liší od přednášené verze.
 Operace {\algo insert} rovnou vkládá přidávaný prvek do haldy, nezdržuje se tvorbou jednoprvkové haldy a~{\algo mergováním}.
 Při {\algo extract minu} se potomci odebíraného vrcholu připojí do seznamu haldových stromů najednou jako sjednocení dvou spojových seznamů místo postupného vkládání.
 V~konsolidaci se velikost pole pro jednotlivé řády haldových stromů neurčuje z~počtu prvků haldy, ale spočítá se jako {\tt maximální řád haldových stromů + počet stromů + 1}.
-Informace o maximálním řádu haldových stromů se průběžně počítá po operacích {\algo extract minu} a {\algo decrease key}.
+Maximální řád se počítá ve chvíli, kdy je potřeba, což je jenom při {\algo extract minu}.
+Při {\algo extract minu} se stejně musí projít všechny haldové stromy, jeden průchod navíc nijak výrazně neovlivní složitost.
 Operací {\algo FHCut} se v~implementaci myslí něco jiného než popis v~\cite[pruvodce], jde přímo o odtržení syna od rodiče.
 
 Pokud se v~operaci {\algo decrease key} priorita klíče nesnížila (tzn. \uv{snižuje} se na hodnotu, která je stále větší než původní), pak se tato operace nepočítá jako provedený {\algo decrease key}.
@@ -39,8 +40,6 @@ Jelikož se nevyvážený test od rovnoměrného testu liší v počtu operací 
 \sec Zákeřný test
 
 Měření zákeřného testu je v grafu~\ref[cunning].
-V~tomto testu se zdá, že obě haldy fungují téměř stejně, což je špatně, příčinu chyby se však nepodařilo najít.
-To však nebrání tomu, abychom si popsali, co se v~zákeřném testu děje.
 
 V~zákeřném testu generátor vytváří haldu na $n$ prvcích, kde soubor stromů obsahuje stromy izomorfní hvězdám~$S_0, S_1, \ldots, S_{\Theta(\sqrt{n})}$, což lze vyčíst z článku~\cite[fib], který je přiložený v generátoru.
 To je možné jenom díky tomu, že naivní verze Fibonacciho haldy dovolí, aby stromy měly takový tvar, z~přednášky víme, že v korektním stromě má $i$-tý syn alespoň $i-2$ synů, což se v~naivní variantě nemusí dít.
@@ -49,9 +48,9 @@ V této haldě pak operace {\algo extract min} trvá $\Omega(\sqrt{n})$, kde $n$
 To je vynuceno tím, že se přidají dva prvky~$v_1$ a $v_2$, kde $p(v_1)$ je minimum a $p(v_2)$ je druhá nejmenší priorita, $p$ označuje prioritu vrcholu.
 Poté se oba extrahují, po první extrakci se pod vrchol $v_2$ napojí všechny stromy a po druhé extrakci máme opět soubor hvězd.
 To v~naivní Fibonacciho haldě zjevně vynutí $\Omega(\sqrt{n})$ kroků.
-Podotkněme, že cyklus dvou {\algo insertů} a {\algo extract minů} je proveden exponenciálně-krát, aby se tento efekt do grafu projevil.
+Podotkněme, že cyklus dvou {\algo insertů} a {\algo extract minů} je proveden exponenciálně-krát, aby se tento efekt do grafu projevil, vytvoření hvězd totiž trvá srovnatelně dlouho.
 
-\inspicwcap{outputs/graph-2.pdf}{cunning}{Průměrný počet kroků operace {\algo extract min} v~zákeřném testu. {\bf Tento graf není správný.} Příčinu chyby se nepodařilo najít.}
+\inspicwcap{outputs/graph-2.pdf}{cunning}{Průměrný počet kroků operace {\algo extract min} v~zákeřném testu.}
 
 \sec Hluboký test
 
@@ -61,7 +60,7 @@ Na cvičeních jsme si ukazovali, že tvorba cesty způsobí, že všechny vrcho
 Provedení operace {\algo decrease} ve standardní variantě na list této cesty způsobí {\algo FHCut} na každý vrchol této cesty, zatímco v naivní variantě se odtrhne pouze list.
 To také odpovídá tomu, že maximální počet kroků roste lineárně a vysvětluje, proč v~tomto testu má naivní varianta lepší operaci {\algo decrease}.
 Maximální počet kroků operace {\algo extract min} také stoupá lineárně, což je nejspíše způsobeno konsolidací jednoprvkových vrcholů, které vznikly po provedení {\algo FHCut} na všech vrcholech cesty a jejich přesunem do seznamu stromů.
-Průměry jsou si však velmi podobné, tento jev je tedy spíše anomálií než pravidlo.
+Průměry jsou si však velmi podobné, tento jev je tedy spíše anomálií než pravidlem.
 
 \inspicwcap{outputs/graph-3.pdf}{deep-extract}{Průměrný počet kroků operace {\algo extract min} v~hlubokém testu.}
 
