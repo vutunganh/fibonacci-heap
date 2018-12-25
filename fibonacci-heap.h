@@ -7,7 +7,6 @@
 #include "linked-list-node.h"
 #include "fh-node.h"
 
-#define fhMinNode(fh) (fh->minNode)
 #define fhGetMin(fh) (fhNodePriority(fhMinNode(fh)))
 #define fhMaxKey(fh) (fh->maxKey)
 #define fhExtracts(fh) (fh->extracts)
@@ -21,7 +20,6 @@ struct FibonacciHeap
 {
   struct LinkedList trees;
   int size;
-  struct FhNode* minNode;
   int maxKey;
   int maxRank;
   struct FhNode** keyMap;
@@ -38,6 +36,9 @@ fibonacciHeapInit(int maxKey);
 
 void
 fibonacciHeapInsert(struct FibonacciHeap* fh, int key, int priority);
+
+bool
+fibonacciHeapGetMin(struct FibonacciHeap* fh, int* result);
 
 /* Extracted key and priority will be returned using parameters `minKey` and
  * `minPriority` respectively.

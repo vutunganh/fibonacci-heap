@@ -64,7 +64,11 @@ main(int argc, char* argv[])
       int ahStatus = arrayHeapInsert(ah, newKey, newPriority);
       fibonacciHeapInsert(fh, newKey, newPriority);
       if (1 == ahStatus) {
-        if (fhGetMin(fh) != newPriority) {
+        int fhMin;
+        bool fhMinStatus;
+        fhMinStatus = fibonacciHeapGetMin(fh, &fhMin);
+        assert(fhMinStatus);
+        if (fhMin != newPriority) {
           fputs("Newly added element should've been the minimum!\n", stderr);
         }
       }
