@@ -26,6 +26,7 @@ main(void)
 
   struct FibonacciHeap* fh = fibonacciHeapInit(MAX_KEY);
   struct ArrayHeap* ah = arrayHeapInit(MAX_KEY);
+  int forceDecreases = 0, decreases = 0;
 
   fprintf(operationsStream, "# %d\n", MAX_KEY);
   for (int _ = 0; _ < MAX_TESTS; ++_) {
@@ -83,12 +84,15 @@ main(void)
         ahGetKey(ah, fhKey) = -1;
       }
     } else {
+      ++decreases;
       bool forceDecrease = (rand() % (1 << 5)) != 0;
       int key = rand() % MAX_KEY;
+      forceDecrease && ++forceDecreases;
       if (forceDecrease && !arrayHeapEmpty(ah)) {
         for (int i = 0; i < MAX_KEY; ++i) {
-          if (-1 != ahGetKey(ah, ((key + i) % MAX_KEY))) {
-            key = i;
+          int currentKey = (key + i) % MAX_KEY;
+          if (-1 != ahGetKey(ah, currentKey)) {
+            key = currentKey;
             break;
           }
         }
@@ -103,6 +107,8 @@ main(void)
   arrayHeapClear(ah);
   fibonacciHeapClear(fh);
   fputs("Tests passed.\n", stderr);
+  fprintf(stderr, "Decreases: %d, force decreases: %d.\n",
+          decreases, forceDecreases);
 
   return 0;
 }
