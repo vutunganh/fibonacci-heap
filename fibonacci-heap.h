@@ -15,6 +15,8 @@
 #define fhDecreases(fh) (fh->decreases)
 #define fhDecreaseSteps(fh) (fh->decreaseSteps)
 #define fhDecreaseMax(fh) (fh->decreaseMax)
+#define fhKeyMap(fh) (fh->keyMap)
+#define fhGetKey(fh, key) ((fhKeyMap(fh))[key])
 
 struct FibonacciHeap
 {

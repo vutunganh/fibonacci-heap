@@ -1,11 +1,11 @@
 CC := clang
 CWARNS := -Wall -pedantic -Wextra
-CDEBUG := -DDEBUG -g -O0
+CDEBUG :=#-DDEBUG -g -O0
 LFLAGS := -lm
 CFLAGS := -std=c99 -O2 $(CWARNS) $(CDEBUG) $(ARGS)
 OBJFILES := linked-list-node.o linked-list.o fh-node.o fibonacci-heap.o \
   array-heap.o
-BINFILES := tester.out judge.out
+BINFILES := tester.out judge.out repeater.out
 STUDENT_ID := 64
 
 build: binfiles
@@ -42,14 +42,20 @@ package:
 clean:
 	-rm *.o *.out
 
+array-heap.o: array-heap.c array-heap.h
 fh-node.o: fh-node.c fh-node.h linked-list.h linked-list-node.h \
  type-declarations.h
+fibgen.o: fibgen.c
 fibonacci-heap.o: fibonacci-heap.c fibonacci-heap.h linked-list-node.h \
  type-declarations.h fh-node.h linked-list.h
+judge.o: judge.c judge-props.h fibonacci-heap.h linked-list-node.h \
+ type-declarations.h fh-node.h linked-list.h array-heap.h
 linked-list.o: linked-list.c linked-list.h linked-list-node.h \
  type-declarations.h fh-node.h
 linked-list-node.o: linked-list-node.c linked-list-node.h \
  type-declarations.h
+repeater.o: repeater.c judge-props.h array-heap.h fibonacci-heap.h \
+ linked-list-node.h type-declarations.h fh-node.h linked-list.h
 tester.o: tester.c fibonacci-heap.h linked-list-node.h \
  type-declarations.h fh-node.h linked-list.h
 

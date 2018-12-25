@@ -97,7 +97,9 @@ arrayHeapDecreaseKey(struct ArrayHeap* const ah, int key, int newPriority)
     return false;
   }
 
-  *value = newPriority;
+  if (*value > newPriority) {
+    *value = newPriority;
+  }
   return true;
 }
 
@@ -105,6 +107,7 @@ void
 arrayHeapClear(struct ArrayHeap* ah)
 {
   free(ahHeap(ah));
+  free(ah);
 }
 
 bool
@@ -113,3 +116,14 @@ arrayHeapKeyExists(struct ArrayHeap* ah, int key)
   return -1 != ahGetKey(ah, key);
 }
 
+bool
+arrayHeapEmpty(const struct ArrayHeap* const ah)
+{
+  for (int i = 0; i < ahMaxKey(ah); ++i) {
+    if (-1 != ahGetKey(ah, i)) {
+      return false;
+    }
+  }
+
+  return true;
+}

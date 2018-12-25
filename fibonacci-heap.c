@@ -7,8 +7,6 @@
 
 #define fhTrees(fh) (fh->trees)
 #define fhSize(fh) (fh->size)
-#define fhKeyMap(fh) (fh->keyMap)
-#define fhGetKey(fh, key) ((fhKeyMap(fh))[key])
 
 int
 max(int a, int b)
@@ -246,14 +244,15 @@ fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority)
   if (NULL == node) {
     return;
   }
-  if (newPriority >= fhNodePriority(node)) {
+  int* currentPriority = &fhNodePriority(node);
+  if (*currentPriority <= newPriority) {
     return;
   }
 
   ++fhDecreases(fh);
   int oldDecreaseSteps = fhDecreaseSteps(fh);
 
-  fhNodePriority(node) = newPriority;
+  *currentPriority = newPriority;
   struct FhNode* parent = fhNodeParent(node);
   if (NULL != parent) {
     ++fhDecreaseSteps(fh);
@@ -265,6 +264,9 @@ fibonacciHeapDecreaseKey(struct FibonacciHeap* fh, int key, int newPriority)
 
   fhDecreaseMax(fh) = max(fhDecreaseMax(fh),
                           fhDecreaseSteps(fh) - oldDecreaseSteps);
+  #ifdef DEBUG
+  assert(fhNodePriority(fhGetKey(fh, key)) == newPriority);
+  #endif
 }
 
 int

@@ -42,5 +42,8 @@ arrayHeapClear(struct ArrayHeap* ah);
 bool
 arrayHeapKeyExists(struct ArrayHeap* ah, int key);
 
+bool
+arrayHeapEmpty(const struct ArrayHeap* const ah);
+
 #endif /* __ARRAY_HEAP__ */
 

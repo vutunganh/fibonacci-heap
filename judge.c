@@ -1,3 +1,4 @@
+#include "judge-props.h"
 #include "fibonacci-heap.h"
 #include "array-heap.h"
 
@@ -6,33 +7,22 @@
 #include <string.h>
 #include <stdbool.h>
 #include <assert.h>
-#include <unistd.h>
 #include <time.h>
-
-#define MAX_TESTS 1000000
-#define MAX_KEY (1<<14)
-#define MAX_PRIORITY (1<<14)
-#define OP_INSERT 0
-#define OP_EXTRACT 1
-#define OP_DECREASE 2
 
 FILE* operationsStream = NULL;
 
 int
-main(int argc, char* argv[])
+main(void)
 {
   srand(time(NULL));
-  if (argc < 2) {
-    fprintf(stderr, "Usage: %s <operations-file>.\n", argv[0]);
-    exit(-1);
-  }
+  time_t currentTime = time(NULL);
+  struct tm* currentDateTime = localtime(&currentTime);
+  const int currentDateTimeStrSize = 128;
+  char currentDateTimeStr[currentDateTimeStrSize];
+  strftime(currentDateTimeStr, currentDateTimeStrSize,
+           "%Y-%m-%d-%H-%M-%S.in", currentDateTime);
 
-  if (access(argv[1], F_OK) != -1) {
-    fputs("Operations file already exists, bailing!\n", stderr);
-    exit(2);
-  } else {
-    operationsStream = fopen(argv[1], "w");
-  }
+  operationsStream = fopen(currentDateTimeStr, "w");
 
   struct FibonacciHeap* fh = fibonacciHeapInit(MAX_KEY);
   struct ArrayHeap* ah = arrayHeapInit(MAX_KEY);
@@ -93,7 +83,16 @@ main(int argc, char* argv[])
         ahGetKey(ah, fhKey) = -1;
       }
     } else {
+      bool forceDecrease = (rand() % 4) != 0;
       int key = rand() % MAX_KEY;
+      if (forceDecrease && !arrayHeapEmpty(ah)) {
+        for (int i = 0; i < MAX_KEY; ++i) {
+          if (-1 != ahGetKey(ah, ((key + i) % MAX_KEY))) {
+            key = i;
+            break;
+          }
+        }
+      }
       int priority = rand() % MAX_PRIORITY;
       fprintf(operationsStream, "D %d %d\n", key, priority);
       arrayHeapDecreaseKey(ah, key, priority);
