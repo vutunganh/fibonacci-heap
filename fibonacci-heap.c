@@ -9,7 +9,6 @@
 #define fhSize(fh) (fh->size)
 #define fhKeyMap(fh) (fh->keyMap)
 #define fhGetKey(fh, key) ((fhKeyMap(fh))[key])
-#define fhMaxRank(fh) (fh->maxRank)
 
 int
 max(int a, int b)
@@ -28,7 +27,6 @@ fibonacciHeapInit(int maxKey)
   fhTrees(res) = linkedListInit();
   fhSize(res) = 0;
   fhMaxKey(res) = maxKey;
-  fhMaxRank(res) = 1;
   fhKeyMap(res) = (struct FhNode**)malloc(maxKey * sizeof(*(fhKeyMap(res))));
   if (NULL == fhKeyMap(res)) {
     fputs("Max key for Fibonacci heap too large.", stderr);
@@ -55,10 +53,25 @@ fibonacciHeapInsert(struct FibonacciHeap* fh, int key, int priority)
   fhGetKey(fh, key) = fhNode;
 }
 
+int
+fibonacciHeapFindMaxRank(struct FibonacciHeap* fh)
+{
+  int res = 0;
+  struct LinkedListNode* it = llHead((&fhTrees(fh)));
+  while (NULL != it) {
+    struct FhNode* curFhNode = llNodeFhNode(it);
+    it = llNodeNext(it);
+    res = max(res, fhNodeOrder(curFhNode));
+  }
+
+  return res;
+}
+
 void
 fibonacciHeapConsolidate(struct FibonacciHeap* fh)
 {
-  int buckets = fhMaxRank(fh) + linkedListSize(&fhTrees(fh)) + 1;
+  int maxRank = fibonacciHeapFindMaxRank(fh);
+  int buckets = maxRank + linkedListSize(&fhTrees(fh)) + 1;
   struct LinkedList* workspace =
     (struct LinkedList*)malloc(buckets * sizeof(*workspace));
   for (int i = 0; i < buckets; ++i) {
@@ -112,17 +125,6 @@ fibonacciHeapConsolidate(struct FibonacciHeap* fh)
 }
 
 void
-fibonacciHeapRecalculateMinimum(struct FibonacciHeap* fh)
-{
-  fhMaxRank(fh) = 1;
-  for (struct LinkedListNode* node = llHead((&fhTrees(fh)));
-       NULL != node; node = llNodeNext(node)) {
-    struct FhNode* curFhNode = llNodeFhNode(node);
-    fhMaxRank(fh) = max(fhMaxRank(fh), fhNodeOrder(curFhNode));
-  }
-}
-
-void
 fibonacciHeapMoveToTop(struct FibonacciHeap* fh, struct FhNode* node)
 {
   if (NULL == fhNodeParent(node)) {
@@ -134,7 +136,6 @@ fibonacciHeapMoveToTop(struct FibonacciHeap* fh, struct FhNode* node)
   linkedListMoveNode(siblings, &fhTrees(fh), llNode);
   fhNodeParent(node) = NULL;
   fhNodeMarked(node) = false;
-  fhMaxRank(fh) = max(fhMaxRank(fh), fhNodeOrder(node));
 }
 
 struct FhNode*
@@ -196,7 +197,6 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
     childIterator = llNodeNext(childIterator);
     fhNodeParent(currentChild) = NULL;
     fhNodeMarked(currentChild) = false;
-    fhMaxRank(fh) = max(fhMaxRank(fh), fhNodeOrder(currentChild));
     #ifdef DEBUG
     ++childrenCnt;
     #endif
@@ -215,7 +215,6 @@ fibonacciHeapExtractMin(struct FibonacciHeap* fh, int* minKey,
 
   --fhSize(fh);
   fibonacciHeapConsolidate(fh);
-  fibonacciHeapRecalculateMinimum(fh);
   fhExtractMax(fh) = max(fhExtractMax(fh), fhExtractSteps(fh) - oldExtractSteps);
   return true;
 }
@@ -228,7 +227,7 @@ fibonacciHeapCut(struct FibonacciHeap* fh, struct FhNode* node)
 {
   struct FhNode* parent = fhNodeParent(node);
   while (NULL != parent) {
-    if (true == fhNodeMarked(node)) {
+    if (fhNodeMarked(node)) {
       ++fhDecreaseSteps(fh);
       fibonacciHeapMoveToTop(fh, node);
       node = parent;
@@ -296,3 +295,4 @@ fibonacciHeapKeyExists(const struct FibonacciHeap* fh, int key)
 {
   return NULL != fhGetKey(fh, key);
 }
+

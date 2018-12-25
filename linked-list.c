@@ -110,10 +110,10 @@ linkedListMoveNode(struct LinkedList* from, struct LinkedList* to,
 void
 linkedListJoin(struct LinkedList* result, struct LinkedList* joined)
 {
-  if (true == linkedListIsEmpty(joined)) {
+  if (linkedListIsEmpty(joined)) {
     return;
   }
-  if (true == linkedListIsEmpty(result)) {
+  if (linkedListIsEmpty(result)) {
     struct LinkedList* tmp = result;
     result = joined;
     joined = tmp;

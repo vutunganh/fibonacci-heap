@@ -21,7 +21,6 @@ struct FibonacciHeap
   struct LinkedList trees;
   int size;
   int maxKey;
-  int maxRank;
   struct FhNode** keyMap;
   int64_t extracts;
   int64_t extractSteps;
